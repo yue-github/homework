@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>作业</title>
+	<script type="text/javascript" src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<!-- 引入组件库 -->
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/homework.css">
+</head>
+<body>
+	<div id="homework" class="homework_box">
+		<div class="homework" style="display: block;">
+			<div class="top_title"  >上传作业</div>
+			<div class="content_box">
+				<div class="left_content">
+					<ul class="ul_box">
+						<li class="li_index" v-for="(course,index) in course_list" @click="vShow(index)" style="cursor:pointer">
+							{{course.name}}
+							<ul v-bind:ref="main+index">
+								<li @click.stop="dianji(index,ind)" v-for="(info,ind) in course.list" class="child_li" v-bind:ref="ind" v->
+									{{info.kecheng_name}}
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<div class="zhong_content">
+					<div class="name">反馈的列表</div>
+	<!-- 容器溢出产生滚动条,使得内部块划到底部解决方案地址链接 -->
+	<!-- https://www.cnblogs.com/theWayToAce/p/5596317.html -->
+
+	 <!--   <script type="text/javascript">
+               
+              window.onload=function(){
+	
+
+                   
+                    var div = document.getElementById('hehe');
+                     
+                    div.scrollTop = div.scrollHeight;
+            }
+       </script> -->
+
+
+
+
+
+					<div class="feedback" id="hehe">
+						<ul class="feedback-ul">
+						<!-- 摁条件循环改变class样式 -->
+							<li :class="{student_comment:stu_fun(xs.is_teacher),teacher_comment:tea_fun(xs.is_teacher)}" v-for="xs in student_list">
+								<div :class="{student_img:stu_fun(xs.is_teacher),teacher_img:tea_fun(xs.is_teacher)}"><img src="img/2.jpg"></div>
+								<div :class="{student_type:stu_fun(xs.is_teacher),teacher_type:tea_fun(xs.is_teacher)}">
+									<div :class="{student_name:stu_fun(xs.is_teacher),teacher_name:tea_fun(xs.is_teacher)}">{{xs.student_info.name}}</div>
+									<div class="time">{{xs.pl_time}}</div>
+									<p class="title">{{xs.pl_content}}</p>
+									<div class="zy_img"><img src=""></div>
+								</div>
+							</li>
+							<!-- 老师列表 -->
+							<!-- <li class="teacher_comment" v-for="teacher in teacher_list">
+								<div class="teacher_img"><img src="img/1.jpg"></div>
+								<div class="teacher_type">
+									<div class="teacher_name">{{teacher.name}}</div>
+									<div class="time">{{teacher.time}}</div>
+									<p class="title">{{teacher.title}}</p>
+								</div>		
+							</li> -->
+							<!-- stu -->
+							<!-- <div class="student-msg">
+								<ul class="stu-msg-ul">
+									<li v-for="val in student_data">
+										<div class="studentImg">
+											<img src="img/2.jpg" alt="">
+										</div>
+									 	<div class="content">
+									 		<div class="username-date">
+									 			<span class="user-name">{{val.name}}</span>
+									 			<span class="send-date">{{val.time}}</span>
+									 		</div>
+									 		<div class="sendMsg">{{val.title}}</div>
+									 	</div>
+									</li>
+								</ul>
+							</div> -->
+						</ul>
+
+						<div class="exchange">
+							<form class="upload">
+								 +
+
+								<input type="file" class="input-file" ref="inpFileFir" @change="loadImg('is_stu')" accept="image/png,image/jpeg,image/gif,image/jpg">
+							</form>
+
+							<div class="input_box"><input v-model="msg" type="text" name="" placeholder="输入想问内容" ref="student"></div>
+							<div class="transmit" @click = transmit()>发送</div>
+
+							<img src="" class="inSrcFir" ref="inSrc">
+						</div>
+						
+					</div>
+				</div>
+				<div class="right_content">
+					<div class="right_p">
+						<p class="prompt">提示</p>
+						<p>为保证老师反馈的质量，每日每科限定提交一次作业</p>
+					</div>
+					<div class="click_box">
+						<p>666</p>
+						<p class="dz_img"><img src="img/dz.png"></p>
+					</div>
+					<div class="click_p">
+						<p>给老师点个赞把！</p>
+					</div>
+					
+				</div>
+			</div>
+			
+		</div>
+		<div class="homework">
+			<div class="top_title">反馈作业</div>
+			<div class="content_box">
+				<div class="left_content">
+					<div class="el_tree">
+						<el-tree :data="ls_list" :props="defaultProps" @node-click="handleNodeClick()"></el-tree>
+					</div>
+				</div>
+				<div class="zhong_content">
+					<div class="name">反馈的列表</div>
+					<div class="feedback" ref="feedback" id="feed">
+						<ul>
+						<!-- 摁条件循环改变class样式 -->
+							<li :class="{student_comment:stu_fun(xs.is_teacher),teacher_comment:tea_fun(xs.is_teacher)}" v-for="xs in teacher_list">
+								<div :class="{student_img:stu_fun(xs.is_teacher),teacher_img:tea_fun(xs.is_teacher)}"><img src="img/2.jpg"></div>
+								<div :class="{student_type:stu_fun(xs.is_teacher),teacher_type:tea_fun(xs.is_teacher)}">
+									<div :class="{student_name:stu_fun(xs.is_teacher),teacher_name:tea_fun(xs.is_teacher)}">{{xs.student_info.name}}</div>
+									<div class="time">{{xs.pl_time}}</div>
+									<p class="title">{{xs.pl_content}}</p>
+									<div class="zy_img"><img src="img/3.jpg"></div>
+								</div>
+							</li>
+							<!-- 老师 -->
+							<!-- <li class="teacher_comment">
+								<div class="teacher_img"><img src="img/1.jpg"></div>
+								<div class="teacher_type">
+									<div class="teacher_name">周老师</div>
+									<div class="time">2018/11/30 10:10</div>
+									<p class="title">好多问题</p>
+								</div>		
+							</li>
+ -->
+							<!-- <li class="student_comment">
+								<div class="student_img"><img src="img/2.jpg"></div>
+								<div class="student_type">
+									<div class="student_name">小华</div>
+									<div class="time">2018/11/30 10:11</div>
+									<p class="title">我现在怎么样</p>
+									<div class="zy_img"><img src="img/3.jpg"></div>
+								</div>
+							</li> -->
+							
+						</ul>
+
+						<div class="exchange" ref="exUl">
+							<div class="upload">
+									 +
+									 <!-- loadImg参数用于判断是点击学生还是老师 -->
+									 <input type="file" class="input-file-sec" ref="inpFileSec" @change="loadImg('is_tea')" accept="image/png,image/jpeg,image/gif,image/jpg">
+							 </div>
+							<div class="input_box"><input type="text" name=""  ref="teacher" v-model="t_msg"></div>
+							<div class="transmit" @click="teacherSend()">发送</div>
+							<img src="" class="inSrcSec" ref="inSrcSec">
+						</div>
+						
+					</div>
+				</div>
+				<div class="right_content">
+					<div class="right_p">
+						<p class="prompt">提示</p>
+						<p class="prompt_title">1. 为保证反馈的质量，每生每科限定提交一次作业反馈，请教师认真阅读学生的试题和答案</p>
+						<p class="prompt_title">2. 老师收到学生的作业，下载后，可用电脑的画板或手机的涂鸦编辑功能，打√打×或标记，并对错误之处附上文字描述</p>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="fixed_box">
+			<div class="ye_box">学生页</div>
+			<div>老师页</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/homework.js"></script>
+
+</body>
+</html>
